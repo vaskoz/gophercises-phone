@@ -1,0 +1,18 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - ./dbseed:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: phones
+      MYSQL_USER: phone_user
+      MYSQL_PASSWORD: phone_pass
+
+  phone:
+    image: mariadbsql:latest
+    environment:
+      - "MARIADBSQL_DATASOURCE=phone_user:phone_pass@tcp(mariadb:3306)/phones"
+    depends_on:
+      - mariadb
