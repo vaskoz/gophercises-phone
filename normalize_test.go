@@ -17,8 +17,11 @@ func TestNormalize(t *testing.T) {
 	}
 
 	for _, test := range testcases {
-		if out := Normalize(test.in); test.out != out {
-			t.Errorf("Expected %s but got %s", test.out, out)
-		}
+		t.Run(test.in, func(t *testing.T) {
+			t.Parallel()
+			if out := Normalize(test.in); test.out != out {
+				t.Errorf("Expected %s but got %s", test.out, out)
+			}
+		})
 	}
 }
