@@ -1,7 +1,14 @@
 package main
 
-import "database/sql"
-import _ "github.com/go-sql-driver/mysql"
+import (
+	"database/sql"
+	"fmt"
+	"log"
+	"os"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/vaskoz/gophercises-phone"
+)
 
 func main() {
 	dataSourceName := os.Getenv("MARIADBSQL_DATASOURCE")
@@ -18,7 +25,7 @@ func main() {
 		if err := rows.Scan(&number); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("%s: %s\n", number, Normalize(number))
+		fmt.Printf("%s: %s\n", number, phone.Normalize(number))
 	}
 	if err := rows.Err(); err != nil {
 		log.Fatal(err)
