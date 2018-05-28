@@ -24,4 +24,5 @@ before_install:
 
 script:
   - go test -cover -v -race
-  - docker logs mariadbsql_phone_1
+  - sleep 1
+  - docker-compose -f cmd/mariadbsql/docker-compose.yml logs
