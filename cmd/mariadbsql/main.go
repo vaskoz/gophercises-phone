@@ -31,7 +31,7 @@ func main() {
 		exit(1)
 		return
 	}
-	for backoff := 1; backoff < 6; backoff *= 2 {
+	for backoff := 1; backoff < 10; backoff *= 2 {
 		if err := db.Ping(); err == nil {
 			break
 		}
