@@ -12,12 +12,18 @@ import (
 )
 
 var (
-	stdout io.Writer = os.Stdout
-	exit   func(int) = os.Exit
+	stdout         io.Writer = os.Stdout
+	exit           func(int) = os.Exit
+	dataSourceName string    = os.Getenv("MARIADBSQL_DATASOURCE")
 )
 
+func reset() {
+	stdout = os.Stdout
+	exit = os.Exit
+	dataSourceName = os.Getenv("MARIADBSQL_DATASOURCE")
+}
+
 func main() {
-	dataSourceName := os.Getenv("MARIADBSQL_DATASOURCE")
 	logger := log.New(stdout, "mariadbsql: ", log.Lshortfile)
 	db, openerr := sql.Open("mysql", dataSourceName)
 	if openerr != nil {
@@ -25,7 +31,7 @@ func main() {
 		exit(1)
 		return
 	}
-	for backoff := 1; backoff < 20; backoff *= 2 {
+	for backoff := 1; backoff < 6; backoff *= 2 {
 		if err := db.Ping(); err == nil {
 			break
 		}
@@ -51,4 +57,5 @@ func main() {
 		exit(1)
 		return
 	}
+	exit(0)
 }
