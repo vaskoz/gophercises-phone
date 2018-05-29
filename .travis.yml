@@ -19,10 +19,11 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - docker build -f cmd/mariadbsql/Dockerfile -t mariadbsql .
-  - docker-compose -f cmd/mariadbsql/docker-compose.yml up -d
+  - docker build -f cmd/mariadbsql/Dockerfile.test -t mariadbsqltest .
+  - docker-compose -f cmd/mariadbsql/docker-compose.test.yml up -d
 
 script:
   - go test -cover -v -race
-  - sleep 1
-  - docker-compose -f cmd/mariadbsql/docker-compose.yml logs
+  - docker wait mariadbsql_sut_1
+  - docker logs mariadbsql_sut_1
+
