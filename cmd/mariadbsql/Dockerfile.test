@@ -1,0 +1,4 @@
+FROM golang:latest
+ADD . /go/src/github.com/vaskoz/gophercises-phone
+WORKDIR /go/src/github.com/vaskoz/gophercises-phone/cmd/mariadbsql
+CMD ["go", "test", "-cover", "-v", "-race", "."]
