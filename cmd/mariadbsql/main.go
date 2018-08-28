@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/vaskoz/gophercises-phone"
@@ -25,37 +24,17 @@ func reset() {
 
 func main() {
 	logger := log.New(stdout, "mariadbsql: ", log.Lshortfile)
-	db, openerr := sql.Open("mysql", dataSourceName)
-	if openerr != nil {
-		logger.Println(openerr)
-		exit(1)
-		return
-	}
-	for backoff := 1; backoff < 10; backoff *= 2 {
-		if err := db.Ping(); err == nil {
-			break
-		}
-		time.Sleep(time.Duration(backoff) * time.Second)
-	}
-	rows, err := db.Query("SELECT number FROM phone")
-	if err != nil {
+	db, _ := sql.Open("mysql", dataSourceName)
+	if err := db.Ping(); err != nil {
 		logger.Println(err)
 		exit(1)
 		return
 	}
+	rows, _ := db.Query("SELECT number FROM phone")
 	for rows.Next() {
 		var number string
-		if err := rows.Scan(&number); err != nil {
-			logger.Println(err)
-			exit(1)
-			return
-		}
+		rows.Scan(&number)
 		logger.Printf("%s: %s\n", number, phone.Normalize(number))
-	}
-	if err := rows.Err(); err != nil {
-		logger.Println(err)
-		exit(1)
-		return
 	}
 	exit(0)
 }
