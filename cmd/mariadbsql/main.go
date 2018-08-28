@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/vaskoz/gophercises-phone"
@@ -25,6 +26,7 @@ func reset() {
 func main() {
 	logger := log.New(stdout, "mariadbsql: ", log.Lshortfile)
 	db, _ := sql.Open("mysql", dataSourceName)
+	time.Sleep(5 * time.Second)
 	if err := db.Ping(); err != nil {
 		logger.Println(err)
 		exit(1)
